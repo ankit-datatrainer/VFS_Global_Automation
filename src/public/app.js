@@ -69,6 +69,7 @@ function renderLive() {
 }
 
 function renderHeat() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   const { grid, empties } = state.heatmap;
   let max = 0;
   for (let w = 0; w < 7; w++) for (let h = 0; h < 24; h++) max = Math.max(max, grid[w][h]);
@@ -81,14 +82,14 @@ function renderHeat() {
     for (let h = 0; h < 24; h++) {
       const hits = grid[w][h];
       const obs = hits + empties[w][h];
-      let bg = '#f0f2f5';
-      let border = '#e4e6eb';
+      let bg = isDark ? '#242526' : '#f0f2f5';
+      let border = isDark ? '#393a3b' : '#e4e6eb';
       if (max > 0 && hits > 0) {
-        const a = 0.2 + 0.8 * (hits / max);
-        bg = `rgba(24, 119, 242, ${a.toFixed(2)})`;
-        border = '#1877f2';
+        const a = 0.25 + 0.75 * (hits / max);
+        bg = isDark ? `rgba(45, 136, 255, ${a.toFixed(2)})` : `rgba(24, 119, 242, ${a.toFixed(2)})`;
+        border = isDark ? '#2d88ff' : '#1877f2';
       } else if (obs > 0) {
-        bg = '#e4e6eb';
+        bg = isDark ? '#3a3b3c' : '#e4e6eb';
       }
       const title = obs ? `${DAYS[w]} ${String(h).padStart(2, '0')}:00 — ${hits} of ${obs} checks` : `${DAYS[w]} ${String(h).padStart(2, '0')}:00 — no checks yet`;
       parts.push(`<div class="cell" style="background:${bg}; border-color:${border};" title="${title}"></div>`);
@@ -221,6 +222,18 @@ async function report(empty) {
   }
 }
 
+function initTheme() {
+  const toggleBtn = $('themeToggle');
+  if (!toggleBtn) return;
+  toggleBtn.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('vfs_theme', next);
+    if (state && state.heatmap) renderHeat();
+  });
+}
+
 $('btnSeen').addEventListener('click', () => report(false));
 $('btnEmpty').addEventListener('click', () => report(true));
 $('stopAlarm').addEventListener('click', async () => {
@@ -236,5 +249,6 @@ setInterval(() => {
   $('clock').textContent = new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata' }) + ' IST';
 }, 1000);
 
+initTheme();
 refresh();
 setInterval(refresh, 5000);
