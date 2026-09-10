@@ -2,111 +2,337 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Slot Relay</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    
+    <!-- SEO & Metadata -->
+    <title>VFS Slot Relay — Bulgaria Type D Visa Appointment Tracker & Lookout Network</title>
+    <meta name="description" content="Real-time collaborative appointment lookout and alert network for Bulgaria Type D long-stay visas across all VFS Global India centres (Delhi, Mumbai, Bengaluru, Chennai, Kolkata, Ahmedabad)." />
+    <meta name="keywords" content="VFS Global, Bulgaria Visa, Type D Visa, Visa Appointment Tracker, New Delhi VFS, Mumbai VFS, Slot Relay, Bulgaria India Visa, Appointment Alerts" />
+    <meta name="author" content="VFS Slot Relay Network" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#1877f2" />
+
+    <!-- Open Graph (Facebook / Social Sharing) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="VFS Global Slot Relay" />
+    <meta property="og:title" content="VFS Slot Relay — Bulgaria Type D Visa Appointment Tracker" />
+    <meta property="og:description" content="Collaborative live slot alert network and sighting tracker for Bulgaria Type D visas in India. Zero bot spam, human verified checkpoints." />
+    <meta property="og:image" content="/logo.svg" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="VFS Slot Relay — Bulgaria Type D Visa Tracker" />
+    <meta name="twitter:description" content="Real-time crowdsourced appointment alerts for VFS Bulgaria Type D across India centres." />
+    <meta name="twitter:image" content="/logo.svg" />
+
+    <!-- Favicon & Touch Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="/style.css" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "VFS Slot Relay — Bulgaria Type D",
+      "alternateName": "VFS Global Visa Slot Tracker",
+      "description": "Collaborative appointment tracker and lookout network for Bulgaria Type D long-stay visas across VFS Global centres in India.",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      }
+    }
+    </script>
   </head>
   <body>
-    <header class="bar">
-      <div class="brand">
-        <span class="dot" id="pulse"></span>
-        <h1>Slot Relay</h1>
-        <span class="tag">Bulgaria Type D · India</span>
+    <!-- Top Navigation Bar -->
+    <header class="bar" role="banner">
+      <div class="brand-container">
+        <a href="/" class="brand-link" aria-label="VFS Slot Relay Home">
+          <img src="/logo.svg" alt="VFS Slot Relay Official Brand Logo" class="brand-logo" width="40" height="40" />
+          <div class="brand-text">
+            <div class="brand-title-row">
+              <h1 class="brand-name">VFS Slot Relay</h1>
+              <span class="badge badge-verified">Verified Hub</span>
+            </div>
+            <span class="brand-subtitle">Bulgaria Type D · India Dispatch Network</span>
+          </div>
+        </a>
       </div>
+
       <div class="bar-right">
-        <span id="clock" class="mono muted"></span>
-        <a class="portal" id="portalLink" href="#" target="_blank" rel="noopener">Official portal ↗</a>
+        <div class="connection-pill" title="Relay status">
+          <span class="dot" id="pulse"></span>
+          <span class="connection-label">Live Monitor</span>
+        </div>
+        <div class="clock-badge">
+          <svg class="clock-icon" viewBox="0 0 20 20" width="14" height="14" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+          </svg>
+          <span id="clock" class="mono">--:--:-- IST</span>
+        </div>
+        <a class="portal-btn" id="portalLink" href="https://visa.vfsglobal.com/ind/en/bgr" target="_blank" rel="noopener noreferrer">
+          <span>Official Portal</span>
+          <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor">
+            <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+            <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+          </svg>
+        </a>
       </div>
     </header>
 
-    <div class="banner">
-      This dashboard never contacts VFS. Every sighting below was reported by a
-      person who was already on the official portal.
-    </div>
-
-    <main>
-      <section class="card alarm-card" id="alarmCard" hidden>
-        <div>
-          <h2>Alarm is ringing</h2>
-          <p class="muted">Silence it once you are looking at the portal.</p>
+    <!-- Trust & Verification Notice -->
+    <aside class="banner" role="region" aria-label="Privacy & Security Architecture">
+      <div class="banner-inner">
+        <div class="banner-icon-box">
+          <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">
+            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
         </div>
-        <button class="btn danger" id="stopAlarm">Silence</button>
-      </section>
+        <p class="banner-text">
+          <strong>Zero-VFS-Traffic Guarantee:</strong> This application never makes automated background requests to VFS Global. Every sighting below is submitted in real time by genuine applicants viewing the official portal.
+        </p>
+      </div>
+    </aside>
 
-      <section class="grid">
-        <div class="card span2">
-          <h2>Live now</h2>
-          <div id="live" class="live-list"><p class="muted">Loading…</p></div>
-        </div>
-
-        <div class="card">
-          <h2>Report what you see</h2>
-          <p class="muted small">
-            Only after you have looked at the portal yourself.
-          </p>
-          <label>Centre
-            <select id="repCentre"></select>
-          </label>
-          <label>Dates you can see
-            <input id="repDates" placeholder="15 Sep, 18 Sep" maxlength="200" />
-          </label>
-          <label>Note <span class="muted small">(optional)</span>
-            <input id="repNote" placeholder="Only morning slots left" maxlength="400" />
-          </label>
-          <div class="row">
-            <button class="btn primary" id="btnSeen">Slots are open</button>
-            <button class="btn" id="btnEmpty">Nothing there</button>
+    <!-- Main Content Canvas -->
+    <main class="main-content" role="main">
+      <!-- High-Priority Alarm Alert (Conditional) -->
+      <section class="card alarm-card" id="alarmCard" hidden aria-live="assertive">
+        <div class="alarm-content">
+          <div class="alarm-icon-pulse">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
           </div>
-          <p id="repMsg" class="msg"></p>
+          <div>
+            <h2 class="alarm-title">Appointment Alarm Is Ringing!</h2>
+            <p class="alarm-desc">Slots have been sighted! Silence the alarm once you open the official portal and secure your booking.</p>
+          </div>
         </div>
+        <button class="btn btn-danger btn-lg" id="stopAlarm">
+          <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clip-rule="evenodd"/>
+          </svg>
+          <span>Silence Alarm</span>
+        </button>
       </section>
 
-      <section class="grid">
-        <div class="card span2">
-          <h2>When slots have actually appeared</h2>
-          <p class="muted small">
-            IST. Darker means slots were more often present when someone looked.
-          </p>
-          <div id="heat" class="heat"></div>
-          <div id="hotList" class="hot-list"></div>
-        </div>
+      <!-- Primary Grid: Live Sightings & Community Report Form -->
+      <div class="grid-layout">
+        <!-- Live Now Section -->
+        <section class="card span2" aria-labelledby="heading-live">
+          <div class="card-header">
+            <div class="header-with-icon">
+              <div class="card-icon-bubble bg-blue-subtle">
+                <svg viewBox="0 0 20 20" width="18" height="18" fill="#1877f2">
+                  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+              <div>
+                <h2 id="heading-live" class="card-title">Live Sightings Right Now</h2>
+                <p class="card-subtitle">Active availability reported across India VFS application centres</p>
+              </div>
+            </div>
+            <span class="live-indicator-pill">Auto-refreshed</span>
+          </div>
+          <div id="live" class="live-list">
+            <div class="loading-state">
+              <div class="spinner"></div>
+              <span>Connecting to sighting stream…</span>
+            </div>
+          </div>
+        </section>
 
-        <div class="card">
-          <h2>Centres</h2>
+        <!-- Report Form Section -->
+        <section class="card" aria-labelledby="heading-report">
+          <div class="card-header">
+            <div class="header-with-icon">
+              <div class="card-icon-bubble bg-blue-subtle">
+                <svg viewBox="0 0 20 20" width="18" height="18" fill="#1877f2">
+                  <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                </svg>
+              </div>
+              <div>
+                <h2 id="heading-report" class="card-title">Report A Sighting</h2>
+                <p class="card-subtitle">Help fellow applicants when you view the portal</p>
+              </div>
+            </div>
+          </div>
+
+          <form id="reportForm" onsubmit="return false;" class="report-form">
+            <div class="form-group">
+              <label for="repCentre" class="form-label">Visa Application Centre</label>
+              <div class="select-wrapper">
+                <select id="repCentre" class="form-control select-control" aria-required="true"></select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="repDates" class="form-label">Appointment Dates You See</label>
+              <input id="repDates" class="form-control" type="text" placeholder="e.g. 15 Sep, 22 Sep (Morning)" maxlength="200" />
+            </div>
+
+            <div class="form-group">
+              <label for="repNote" class="form-label">
+                <span>Extra Note</span>
+                <span class="text-muted">(optional)</span>
+              </label>
+              <input id="repNote" class="form-control" type="text" placeholder="e.g. Only 3 slots available, work category" maxlength="400" />
+            </div>
+
+            <div class="btn-group-row">
+              <button class="btn btn-primary" id="btnSeen" type="button">
+                <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">
+                  <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                </svg>
+                <span>Slots Are Open</span>
+              </button>
+              <button class="btn btn-secondary" id="btnEmpty" type="button">
+                <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                </svg>
+                <span>Nothing There</span>
+              </button>
+            </div>
+            <p id="repMsg" class="msg" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+      </div>
+
+      <!-- Secondary Grid: Heatmap & Centre Breakdown -->
+      <div class="grid-layout">
+        <!-- Heatmap Section -->
+        <section class="card span2" aria-labelledby="heading-heat">
+          <div class="card-header">
+            <div class="header-with-icon">
+              <div class="card-icon-bubble bg-blue-subtle">
+                <svg viewBox="0 0 20 20" width="18" height="18" fill="#1877f2">
+                  <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+              <div>
+                <h2 id="heading-heat" class="card-title">When Slots Actually Appear</h2>
+                <p class="card-subtitle">Indian Standard Time (IST). Darker blue signifies higher slot release frequency.</p>
+              </div>
+            </div>
+          </div>
+          <div class="heat-wrapper">
+            <div id="heat" class="heat"></div>
+          </div>
+          <div class="hot-windows-container">
+            <span class="hot-label">Peak Release Windows:</span>
+            <div id="hotList" class="hot-list"></div>
+          </div>
+        </section>
+
+        <!-- Centre Breakdown Section -->
+        <section class="card" aria-labelledby="heading-centres">
+          <div class="card-header">
+            <div class="header-with-icon">
+              <div class="card-icon-bubble bg-blue-subtle">
+                <svg viewBox="0 0 20 20" width="18" height="18" fill="#1877f2">
+                  <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                </svg>
+              </div>
+              <div>
+                <h2 id="heading-centres" class="card-title">Centres Activity</h2>
+                <p class="card-subtitle">Hit rate per regional Bulgaria Type D hub</p>
+              </div>
+            </div>
+          </div>
           <div id="breakdown" class="breakdown"></div>
-        </div>
-      </section>
+        </section>
+      </div>
 
-      <section class="grid">
-        <div class="card">
-          <h2>How fast they go</h2>
-          <div id="lifetime" class="stat-big"><span class="muted">No data yet</span></div>
-        </div>
-        <div class="card">
-          <h2>Your drill</h2>
-          <div id="drill" class="stat-big"><span class="muted">Never run</span></div>
-          <p class="muted small mono">npm run drill</p>
-        </div>
-        <div class="card">
-          <h2>Lookouts</h2>
-          <div id="subs" class="stat-big"><span class="muted">—</span></div>
-          <p class="muted small">Fairness caps are enforced on every fan-out.</p>
-        </div>
-      </section>
+      <!-- Tertiary Grid: Performance & Community Lookouts -->
+      <div class="grid-layout three-col">
+        <article class="card stat-card" aria-labelledby="heading-lifetime">
+          <div class="stat-header">
+            <div class="stat-badge-icon">⏱️</div>
+            <h2 id="heading-lifetime" class="stat-title">How Fast They Go</h2>
+          </div>
+          <div id="lifetime" class="stat-big"><span class="text-muted">No data yet</span></div>
+          <p class="stat-caption">Average window duration before slots fill up</p>
+        </article>
 
-      <section class="card">
-        <h2>Recent reports</h2>
-        <div id="recent" class="recent"></div>
+        <article class="card stat-card" aria-labelledby="heading-drill">
+          <div class="stat-header">
+            <div class="stat-badge-icon">⚡</div>
+            <h2 id="heading-drill" class="stat-title">Reaction Drill Speed</h2>
+          </div>
+          <div id="drill" class="stat-big"><span class="text-muted">Never run</span></div>
+          <p class="stat-caption mono">Run: npm run drill</p>
+        </article>
+
+        <article class="card stat-card" aria-labelledby="heading-lookouts">
+          <div class="stat-header">
+            <div class="stat-badge-icon">👥</div>
+            <h2 id="heading-lookouts" class="stat-title">Active Lookouts</h2>
+          </div>
+          <div id="subs" class="stat-big"><span class="text-muted">—</span></div>
+          <p class="stat-caption">Fairness waves prevent tout hoarding</p>
+        </article>
+      </div>
+
+      <!-- Recent Reports Feed -->
+      <section class="card" aria-labelledby="heading-recent">
+        <div class="card-header">
+          <div class="header-with-icon">
+            <div class="card-icon-bubble bg-blue-subtle">
+              <svg viewBox="0 0 20 20" width="18" height="18" fill="#1877f2">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <div>
+              <h2 id="heading-recent" class="card-title">Recent Activity Log</h2>
+              <p class="card-subtitle">Chronological timeline of community reports and status transitions</p>
+            </div>
+          </div>
+        </div>
+        <div id="recent" class="recent-list"></div>
       </section>
     </main>
 
-    <footer>
-      <button class="btn ghost" id="testAlarm">Test the alarm</button>
-      <span class="muted small">
-        You always complete the booking yourself, on the official portal.
-      </span>
+    <!-- Footer -->
+    <footer class="site-footer" role="contentinfo">
+      <div class="footer-content">
+        <div class="footer-left">
+          <div class="footer-brand">
+            <img src="/logo.svg" alt="VFS Slot Relay" width="24" height="24" />
+            <span class="footer-title">VFS Global Slot Relay Hub</span>
+          </div>
+          <p class="footer-note">
+            Built strictly for individual applicants. Always complete the final booking by hand on the official portal.
+          </p>
+        </div>
+        <div class="footer-right">
+          <button class="btn btn-outline" id="testAlarm" type="button">
+            <svg viewBox="0 0 20 20" width="15" height="15" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+            </svg>
+            <span>Run Test Alarm Drill</span>
+          </button>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Bulgaria Type D India Lookout Network · Pure Client/Server Architecture</span>
+      </div>
     </footer>
 
+    <!-- Application Script -->
     <script src="/app.js"></script>
   </body>
 </html>

@@ -33,20 +33,23 @@ function renderLive() {
   const el = $('live');
   if (!state.live.length) {
     el.innerHTML =
-      '<p class="muted">Nothing live right now.<br>Next time you check the portal, use the panel on the right — even "nothing there" helps.</p>';
+      '<div class="loading-state"><p class="text-muted" style="text-align: center; margin: 0;">No live sightings right now.<br><span style="font-size: 12px;">Next time you check the portal, report using the panel on the right — even "Nothing there" helps!</span></p></div>';
     return;
   }
   el.innerHTML = state.live
     .map((s) => {
       const city = state.centres.find((c) => c.code === s.centre)?.city || s.centre;
       return `<div class="sighting">
-        <div>
-          <div class="where">${esc(city)}</div>
-          <div class="dates">${esc(s.slot_dates) || '<span class="muted">dates not given</span>'}</div>
-          ${s.note ? `<div class="when">${esc(s.note)}</div>` : ''}
-          <div class="when">${ago(s.created_at)} · id ${s.id}${s.confirms ? ` · ${s.confirms} confirmed` : ''}</div>
+        <div class="sighting-info">
+          <div class="sighting-header-row">
+            <span class="where">${esc(city)}</span>
+            <span class="city-badge">${esc(s.centre)}</span>
+          </div>
+          <div class="dates">📅 ${esc(s.slot_dates) || '<span class="text-muted">Dates not specified</span>'}</div>
+          ${s.note ? `<div class="when">💬 ${esc(s.note)}</div>` : ''}
+          <div class="when">🕒 ${ago(s.created_at)} · ID #${s.id}${s.confirms ? ` · ${s.confirms} confirmed` : ''}</div>
         </div>
-        <button class="btn" data-gone="${s.id}">Gone</button>
+        <button class="btn" data-gone="${s.id}">Mark Gone</button>
       </div>`;
     })
     .join('');
@@ -78,15 +81,17 @@ function renderHeat() {
     for (let h = 0; h < 24; h++) {
       const hits = grid[w][h];
       const obs = hits + empties[w][h];
-      let bg = '#171d29';
+      let bg = '#f0f2f5';
+      let border = '#e4e6eb';
       if (max > 0 && hits > 0) {
-        const a = 0.18 + 0.82 * (hits / max);
-        bg = `rgba(77,163,255,${a.toFixed(2)})`;
+        const a = 0.2 + 0.8 * (hits / max);
+        bg = `rgba(24, 119, 242, ${a.toFixed(2)})`;
+        border = '#1877f2';
       } else if (obs > 0) {
-        bg = '#1e2532';
+        bg = '#e4e6eb';
       }
       const title = obs ? `${DAYS[w]} ${String(h).padStart(2, '0')}:00 — ${hits} of ${obs} checks` : `${DAYS[w]} ${String(h).padStart(2, '0')}:00 — no checks yet`;
-      parts.push(`<div class="cell" style="background:${bg}" title="${title}"></div>`);
+      parts.push(`<div class="cell" style="background:${bg}; border-color:${border};" title="${title}"></div>`);
     }
   }
   $('heat').innerHTML = parts.join('');
@@ -95,10 +100,10 @@ function renderHeat() {
     ? state.hotWindows
         .map(
           (w) =>
-            `<span class="chip">${DAYS[w.weekday]} ${String(w.hour).padStart(2, '0')}:00 · ${Math.round(w.rate * 100)}% of ${w.observations}</span>`,
+            `<span class="chip">${DAYS[w.weekday]} ${String(w.hour).padStart(2, '0')}:00 · ${Math.round(w.rate * 100)}% (${w.hits}/${w.observations})</span>`,
         )
         .join('')
-    : '<span class="muted small">No window stands out yet — keep logging checks.</span>';
+    : '<span class="text-muted" style="font-size: 12px;">No window stands out yet — keep logging checks.</span>';
 }
 
 function renderBreakdown() {
@@ -108,7 +113,7 @@ function renderBreakdown() {
       return `<div class="brow">
         <span class="code">${b.code}</span>
         <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
-        <span class="muted small">${b.sightings}/${b.sightings + b.emptyChecks}</span>
+        <span class="text-muted mono" style="font-size: 11.5px; width: 44px; text-align: right;">${b.sightings}/${b.sightings + b.emptyChecks}</span>
       </div>`;
     })
     .join('');
@@ -119,17 +124,17 @@ function renderStats() {
   $('lifetime').innerHTML = lt
     ? `${lt.medianMinutes}<span class="unit">min median</span>
        <div class="stat-sub">fastest ${lt.fastestMinutes} min · ${lt.samples} samples</div>`
-    : '<span class="muted">No data yet</span>';
+    : '<span class="text-muted">No data yet</span>';
 
   const d = state.drill;
   $('drill').innerHTML = d
     ? `${d.best.toFixed(1)}<span class="unit">s best</span>
        <div class="stat-sub">${d.runs} runs · median ${d.median.toFixed(1)}s · ${d.cleanRuns} clean</div>`
-    : '<span class="muted">Never run</span>';
+    : '<span class="text-muted">Never run</span>';
 
   const s = state.subscribers;
   $('subs').innerHTML = `${s.active}<span class="unit">active</span>
-    <div class="stat-sub">${s.reporting} have reported · max ${state.fairness.maxAlertsPerDay} alerts/day each</div>`;
+    <div class="stat-sub">${s.reporting} reporting · max ${state.fairness.maxAlertsPerDay}/day</div>`;
 }
 
 function renderRecent() {
@@ -137,13 +142,15 @@ function renderRecent() {
     ? state.recent
         .map(
           (s) => `<div class="rrow ${s.gone_at ? 'gone' : ''}">
-            <span class="rcode">${s.centre}</span>
-            <span>${esc(s.slot_dates) || '<span class="muted">—</span>'}${s.note ? ` · <span class="muted">${esc(s.note)}</span>` : ''}</span>
-            <span class="muted">${ago(s.created_at)}${s.gone_at ? ' · gone' : ''}</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="rcode">${s.centre}</span>
+              <span style="font-weight: 500;">${esc(s.slot_dates) || '<span class="text-muted">—</span>'}${s.note ? ` · <span class="text-muted">${esc(s.note)}</span>` : ''}</span>
+            </div>
+            <span class="text-muted mono" style="font-size: 11.5px;">${ago(s.created_at)}${s.gone_at ? ' · gone' : ''}</span>
           </div>`,
         )
         .join('')
-    : '<p class="muted">Nothing reported yet.</p>';
+    : '<p class="text-muted" style="padding: 12px 0;">Nothing reported yet.</p>';
 }
 
 function renderAlarm() {
