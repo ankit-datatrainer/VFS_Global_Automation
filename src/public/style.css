@@ -63,55 +63,55 @@
 }
 
 /* ==========================================================================
-   Dark Theme Overrides (Facebook Dark Mode Palette)
+   Dark Blue Theme Overrides (Deep Midnight Navy & Electric Facebook Blue)
    ========================================================================== */
 [data-theme="dark"] {
   --fb-blue: #2d88ff;
-  --fb-blue-hover: #4599ff;
+  --fb-blue-hover: #4ea2ff;
   --fb-blue-active: #1877f2;
   --fb-blue-subtle: rgba(45, 136, 255, 0.16);
-  --fb-blue-subtle-hover: rgba(45, 136, 255, 0.26);
-  --fb-blue-border: rgba(45, 136, 255, 0.38);
+  --fb-blue-subtle-hover: rgba(45, 136, 255, 0.28);
+  --fb-blue-border: rgba(45, 136, 255, 0.4);
   --fb-blue-glow: rgba(45, 136, 255, 0.35);
 
-  /* Surfaces */
-  --bg-canvas: #18191a;
-  --bg-surface: #242526;
-  --bg-subtle: #3a3b3c;
-  --bg-hover: #3a3b3c;
+  /* Deep Midnight Blue Surfaces */
+  --bg-canvas: #090e1a;
+  --bg-surface: #0f172a;
+  --bg-subtle: #17233f;
+  --bg-hover: #1e2e54;
   
-  /* Borders */
-  --border-light: #393a3b;
-  --border-medium: #4e4f50;
+  /* Deep Blue Borders */
+  --border-light: #1e293b;
+  --border-medium: #273a5e;
   --border-focus: #2d88ff;
 
   /* Typography */
-  --text-primary: #e4e6eb;
-  --text-secondary: #b0b3b8;
-  --text-muted: #8a8d91;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
   --text-inverse: #ffffff;
 
   /* Status */
-  --status-good: #42b72a;
-  --status-good-bg: rgba(66, 183, 42, 0.16);
-  --status-good-border: rgba(66, 183, 42, 0.38);
-  --status-bad: #fa383e;
-  --status-bad-bg: rgba(250, 56, 62, 0.16);
-  --status-bad-border: rgba(250, 56, 62, 0.38);
-  --status-warn: #f7b125;
-  --status-warn-bg: rgba(247, 177, 37, 0.16);
-  --status-warn-border: rgba(247, 177, 37, 0.38);
+  --status-good: #2ed573;
+  --status-good-bg: rgba(46, 213, 115, 0.14);
+  --status-good-border: rgba(46, 213, 115, 0.35);
+  --status-bad: #ff4757;
+  --status-bad-bg: rgba(255, 71, 87, 0.16);
+  --status-bad-border: rgba(255, 71, 87, 0.38);
+  --status-warn: #ffa502;
+  --status-warn-bg: rgba(255, 165, 2, 0.15);
+  --status-warn-border: rgba(255, 165, 2, 0.35);
 
-  /* Heatmap Dark */
-  --heat-empty: #242526;
-  --heat-border: #393a3b;
-  --heat-observed: #3a3b3c;
+  /* Heatmap Dark Blue */
+  --heat-empty: #0b1324;
+  --heat-border: #16223b;
+  --heat-observed: #1a2948;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.6);
-  --shadow-blue: 0 4px 16px rgba(45, 136, 255, 0.4);
+  /* Shadows with deep blue ambiance */
+  --shadow-sm: 0 1px 3px rgba(2, 6, 23, 0.5);
+  --shadow-md: 0 4px 16px rgba(2, 6, 23, 0.65), 0 0 1px rgba(45, 136, 255, 0.2);
+  --shadow-lg: 0 10px 30px rgba(2, 6, 23, 0.85), 0 0 2px rgba(45, 136, 255, 0.3);
+  --shadow-blue: 0 4px 18px rgba(45, 136, 255, 0.45);
 }
 
 /* Base Styles */

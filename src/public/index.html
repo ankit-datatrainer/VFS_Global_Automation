@@ -40,7 +40,7 @@
     <script>
       (function() {
         var stored = localStorage.getItem('vfs_theme');
-        var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        var theme = stored || 'dark';
         document.documentElement.setAttribute('data-theme', theme);
       })();
     </script>
