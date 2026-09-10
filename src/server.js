@@ -159,13 +159,29 @@ export function createServer({ onSighting } = {}) {
 }
 
 export function start({ onSighting } = {}) {
-  const server = createServer({ onSighting });
-  return new Promise((resolve) => {
-    server.listen(config.dashboard.port, config.dashboard.host, () => {
-      resolve({
-        server,
-        url: `http://${config.dashboard.host}:${config.dashboard.port}`,
+  return new Promise((resolve, reject) => {
+    let port = config.dashboard.port;
+    const host = config.dashboard.host;
+
+    function tryBind() {
+      const server = createServer({ onSighting });
+      server.once('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+          console.warn(`[server] Port ${port} is in use, trying port ${port + 1}...`);
+          port += 1;
+          setTimeout(tryBind, 50);
+        } else {
+          reject(err);
+        }
       });
-    });
+      server.listen(port, host, () => {
+        resolve({
+          server,
+          url: `http://${host}:${port}`,
+        });
+      });
+    }
+
+    tryBind();
   });
 }

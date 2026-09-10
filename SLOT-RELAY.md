@@ -62,7 +62,7 @@ Fill in a Telegram bot token if you want phone alerts (see below), then:
 npm start
 ```
 
-Open <http://127.0.0.1:3000>.
+Open <http://127.0.0.1:4140>.
 
 ### Telegram alerts (optional, recommended)
 

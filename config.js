@@ -97,7 +97,7 @@ export const config = {
 
   dashboard: {
     host: process.env.DASHBOARD_HOST || '127.0.0.1',
-    port: Number(process.env.DASHBOARD_PORT || 3000),
+    port: Number(process.env.DASHBOARD_PORT || 4140),
     /** Shared secret for the "report a sighting" web form. */
     reportToken: process.env.REPORT_TOKEN || '',
   },
