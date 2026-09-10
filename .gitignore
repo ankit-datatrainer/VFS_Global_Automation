@@ -1,0 +1,46 @@
+# VFS Slot Hunter
+
+# Dependencies & build artifacts
+node_modules/
+dist/
+
+# Environment & secrets
+.env
+*.key
+
+# Local data (SQLite databases, encrypted candidate data)
+data/
+
+# Logs
+logs/
+*.log
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Playwright browsers (downloaded separately)
+# playwright-browsers/
+
+# Slot Relay
+.env.slot-relay
+sessions/
+
+.claude/
+
+# Python assistant and sensitive browser diagnostics
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+artifacts/
+screenshots/
+traces/
+*.sqlite3
+*.sqlite3-*
+*.private.json
+*.private.*

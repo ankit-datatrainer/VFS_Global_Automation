@@ -1,0 +1,13 @@
+portal_url: https://visa.vfsglobal.com/ind/en/bgr
+browser_channel: chrome
+trace: true
+action_timeout_ms: 15000
+monitor:
+  enabled: true
+  maximum_session_minutes: 60
+  maximum_checks: 30
+  maximum_checks_per_hour: 12
+  interval_seconds: 300
+  retry_on_network_error: 3
+  maximum_consecutive_errors: 3
+  cooldown_seconds: 300

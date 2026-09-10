@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VFS Slot Hunter — Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <div class="logo">
+          <span class="logo-icon">🎯</span>
+          <h1>VFS Slot Hunter</h1>
+        </div>
+        <div class="status-badge" id="statusBadge">
+          <span class="status-dot"></span>
+          <span class="status-text">Connecting...</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <span class="uptime" id="uptime">Uptime: --</span>
+        <button class="btn btn-sm btn-outline" id="forceCheckBtn" onclick="forceCheck()">⚡ Force Check</button>
+        <button class="btn btn-sm btn-warning" id="pauseBtn" onclick="togglePause()">⏸️ Pause</button>
+      </div>
+    </header>
+
+    <!-- Main Grid -->
+    <main class="dashboard-grid">
+      <!-- Stats Cards Row -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon">🔍</div>
+          <div class="stat-content">
+            <span class="stat-value" id="totalChecks">0</span>
+            <span class="stat-label">Total Checks</span>
+          </div>
+        </div>
+        <div class="stat-card stat-highlight">
+          <div class="stat-icon">🎯</div>
+          <div class="stat-content">
+            <span class="stat-value" id="slotsFound">0</span>
+            <span class="stat-label">Slots Found</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-content">
+            <span class="stat-value" id="successRate">0%</span>
+            <span class="stat-label">Success Rate</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏙️</div>
+          <div class="stat-content">
+            <span class="stat-value" id="targetCity">--</span>
+            <span class="stat-label">Target City</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">❌</div>
+          <div class="stat-content">
+            <span class="stat-value" id="failures">0</span>
+            <span class="stat-label">Failures</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slot Alert Banner (hidden by default) -->
+      <div class="slot-alert" id="slotAlert" style="display: none;">
+        <div class="slot-alert-icon">🚨</div>
+        <div class="slot-alert-content">
+          <h2>SLOT FOUND!</h2>
+          <p id="slotAlertDetails">--</p>
+        </div>
+        <a href="#" class="btn btn-lg btn-success" id="bookNowBtn" target="_blank">📅 BOOK NOW</a>
+      </div>
+
+      <!-- Two Column Layout -->
+      <div class="two-col">
+        <!-- Left: Live Log -->
+        <div class="card">
+          <div class="card-header">
+            <h2>📋 Live Activity Log</h2>
+            <span class="badge" id="logCount">0</span>
+          </div>
+          <div class="log-container" id="logContainer">
+            <div class="log-empty">Waiting for first check...</div>
+          </div>
+        </div>
+
+        <!-- Right: Pattern Intelligence -->
+        <div class="card">
+          <div class="card-header">
+            <h2>🧠 Slot Intelligence</h2>
+            <button class="btn btn-sm btn-ghost" onclick="refreshIntelligence()">🔄</button>
+          </div>
+          <div class="intelligence-content" id="intelligenceContent">
+            <div class="intel-section">
+              <h3>🕐 Hourly Heatmap</h3>
+              <div class="heatmap" id="hourlyHeatmap">
+                <p class="text-muted">Collecting data...</p>
+              </div>
+            </div>
+            <div class="intel-section">
+              <h3>📅 Daily Patterns</h3>
+              <div id="dailyPattern">
+                <p class="text-muted">Collecting data...</p>
+              </div>
+            </div>
+            <div class="intel-section">
+              <h3>⏱️ Slot Survival</h3>
+              <div id="slotSurvival">
+                <p class="text-muted">No data yet</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Candidates Section -->
+      <div class="card">
+        <div class="card-header">
+          <h2>👥 Candidates</h2>
+          <span class="badge" id="candidateCount">0</span>
+        </div>
+        <div class="table-container">
+          <table class="data-table" id="candidatesTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Passport</th>
+                <th>City</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Job Start</th>
+              </tr>
+            </thead>
+            <tbody id="candidatesBody">
+              <tr><td colspan="7" class="text-center text-muted">No candidates added yet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Next Check Countdown -->
+      <div class="countdown-bar">
+        <div class="countdown-text">Next check in: <span id="countdown">--</span></div>
+        <div class="countdown-progress">
+          <div class="countdown-fill" id="countdownFill"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // ── WebSocket Connection ──
+    let ws;
+    let isConnected = false;
+    let isPaused = false;
+    let nextCheckIn = 0;
+    let countdownInterval;
+    const logs = [];
+    const MAX_LOGS = 200;
+
+    function connect() {
+      const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+      ws = new WebSocket(`${protocol}//${location.host}`);
+
+      ws.onopen = () => {
+        isConnected = true;
+        updateStatusBadge('running');
+        console.log('Connected to VFS Slot Hunter');
+      };
+
+      ws.onmessage = (event) => {
+        const msg = JSON.parse(event.data);
+        handleMessage(msg);
+      };
+
+      ws.onclose = () => {
+        isConnected = false;
+        updateStatusBadge('disconnected');
+        setTimeout(connect, 3000);
+      };
+
+      ws.onerror = () => {
+        isConnected = false;
+        updateStatusBadge('error');
+      };
+    }
+
+    function handleMessage(msg) {
+      switch (msg.type) {
+        case 'status':
+          updateStatus(msg.data);
+          break;
+        case 'slots-found':
+          showSlotAlert(msg.data);
+          addLog('🎉 SLOTS FOUND!', 'success', msg.data);
+          break;
+        case 'no-slots':
+          addLog('No slots available', 'info', msg.data);
+          break;
+        case 'error':
+          addLog(`Error: ${msg.data.error}`, 'error', msg.data);
+          break;
+        case 'log':
+          addLog(msg.data.message, msg.data.level);
+          break;
+      }
+    }
+
+    function updateStatus(data) {
+      document.getElementById('totalChecks').textContent = data.totalChecks || 0;
+      document.getElementById('slotsFound').textContent = data.slotsFound || 0;
+      document.getElementById('targetCity').textContent = data.targetCity || '--';
+      document.getElementById('failures').textContent = data.consecutiveFailures || 0;
+      document.getElementById('uptime').textContent = `Uptime: ${data.uptime || '--'}`;
+
+      const total = data.totalChecks || 0;
+      const found = data.slotsFound || 0;
+      const rate = total > 0 ? ((found / total) * 100).toFixed(1) + '%' : '0%';
+      document.getElementById('successRate').textContent = rate;
+
+      if (data.nextCheckIn) {
+        startCountdown(data.nextCheckIn);
+      }
+
+      if (data.schedulerPaused) {
+        updateStatusBadge('paused');
+        isPaused = true;
+      } else if (data.isRunning) {
+        updateStatusBadge('running');
+        isPaused = false;
+      }
+    }
+
+    function updateStatusBadge(status) {
+      const badge = document.getElementById('statusBadge');
+      const dot = badge.querySelector('.status-dot');
+      const text = badge.querySelector('.status-text');
+
+      badge.className = 'status-badge status-' + status;
+
+      const labels = {
+        running: 'Monitoring Active',
+        paused: 'Paused',
+        error: 'Error',
+        disconnected: 'Disconnected',
+      };
+      text.textContent = labels[status] || status;
+    }
+
+    function showSlotAlert(data) {
+      const alert = document.getElementById('slotAlert');
+      const details = document.getElementById('slotAlertDetails');
+      const bookBtn = document.getElementById('bookNowBtn');
+
+      const dates = data.slots.map(s => s.date).join(', ');
+      details.textContent = `${data.city} — ${dates} — ${data.slots.length} slot(s) available!`;
+      bookBtn.href = 'https://visa.vfsglobal.com/ind/en/bgr/book-an-appointment';
+
+      alert.style.display = 'flex';
+      alert.classList.add('animate-pulse');
+
+      // Play browser notification sound
+      try { new Audio('data:audio/wav;base64,UklGRl9vT19teleXBpc2UAAAABAAEARKwAAIhYAQACABAAAABkYXRhQW9PXw==').play(); } catch(e) {}
+
+      // Browser notification
+      if (Notification.permission === 'granted') {
+        new Notification('🚨 VFS SLOT FOUND!', {
+          body: `${data.city} — ${dates}`,
+          requireInteraction: true,
+        });
+      }
+    }
+
+    function addLog(message, level = 'info', data = null) {
+      const time = new Date().toLocaleTimeString('en-IN');
+      const entry = { time, message, level, data };
+      logs.unshift(entry);
+      if (logs.length > MAX_LOGS) logs.pop();
+
+      const container = document.getElementById('logContainer');
+      const logCount = document.getElementById('logCount');
+      logCount.textContent = logs.length;
+
+      // Render last 50 entries
+      const html = logs.slice(0, 50).map(log => {
+        const levelClass = log.level === 'error' ? 'log-error' :
+                          log.level === 'success' ? 'log-success' :
+                          log.level === 'warn' ? 'log-warn' : 'log-info';
+        return `<div class="log-entry ${levelClass}">
+          <span class="log-time">${log.time}</span>
+          <span class="log-msg">${escapeHtml(log.message)}</span>
+        </div>`;
+      }).join('');
+
+      container.innerHTML = html || '<div class="log-empty">Waiting for first check...</div>';
+    }
+
+    function startCountdown(seconds) {
+      nextCheckIn = seconds;
+      clearInterval(countdownInterval);
+
+      const fill = document.getElementById('countdownFill');
+      const text = document.getElementById('countdown');
+      const total = seconds;
+
+      countdownInterval = setInterval(() => {
+        nextCheckIn--;
+        if (nextCheckIn <= 0) {
+          clearInterval(countdownInterval);
+          text.textContent = 'Checking...';
+          fill.style.width = '100%';
+          return;
+        }
+        text.textContent = `${nextCheckIn}s`;
+        fill.style.width = `${((total - nextCheckIn) / total) * 100}%`;
+      }, 1000);
+    }
+
+    // ── API Actions ──
+    async function forceCheck() {
+      const btn = document.getElementById('forceCheckBtn');
+      btn.disabled = true;
+      btn.textContent = '⏳ Checking...';
+      try {
+        const res = await fetch('/api/force-check', { method: 'POST' });
+        const data = await res.json();
+        addLog(`Force check: ${data.slotsFound} slots found`, data.slotsFound > 0 ? 'success' : 'info');
+      } catch (e) {
+        addLog(`Force check failed: ${e.message}`, 'error');
+      }
+      btn.disabled = false;
+      btn.textContent = '⚡ Force Check';
+    }
+
+    async function togglePause() {
+      const btn = document.getElementById('pauseBtn');
+      const endpoint = isPaused ? '/api/resume' : '/api/pause';
+      try {
+        await fetch(endpoint, { method: 'POST' });
+        isPaused = !isPaused;
+        btn.textContent = isPaused ? '▶️ Resume' : '⏸️ Pause';
+        updateStatusBadge(isPaused ? 'paused' : 'running');
+      } catch (e) {
+        addLog(`Toggle failed: ${e.message}`, 'error');
+      }
+    }
+
+    async function refreshIntelligence() {
+      try {
+        const res = await fetch('/api/intelligence');
+        const data = await res.json();
+        renderIntelligence(data);
+      } catch (e) {
+        console.error('Failed to load intelligence:', e);
+      }
+    }
+
+    function renderIntelligence(data) {
+      // Hourly heatmap
+      const heatmap = document.getElementById('hourlyHeatmap');
+      if (data.hourlyPattern?.length > 0) {
+        const maxRate = Math.max(...data.hourlyPattern.map(h => h.success_rate || 0), 1);
+        heatmap.innerHTML = `<div class="heatmap-grid">${
+          Array.from({ length: 24 }, (_, i) => {
+            const hourData = data.hourlyPattern.find(h => h.hour === i);
+            const rate = hourData?.success_rate || 0;
+            const intensity = rate / maxRate;
+            const bg = intensity > 0 ? `rgba(16, 185, 129, ${0.2 + intensity * 0.8})` : 'rgba(255,255,255,0.05)';
+            return `<div class="heatmap-cell" style="background:${bg}" title="${i}:00 — ${rate}% (${hourData?.slots_detected || 0} slots)">
+              <span class="heatmap-hour">${i}</span>
+            </div>`;
+          }).join('')
+        }</div>`;
+      }
+
+      // Daily pattern
+      const daily = document.getElementById('dailyPattern');
+      if (data.dailyPattern?.length > 0) {
+        daily.innerHTML = data.dailyPattern.map(d =>
+          `<div class="pattern-row">
+            <span class="pattern-day">${d.dayName}</span>
+            <div class="pattern-bar-container">
+              <div class="pattern-bar" style="width: ${d.success_rate}%"></div>
+            </div>
+            <span class="pattern-value">${d.success_rate}%</span>
+          </div>`
+        ).join('');
+      }
+
+      // Slot survival
+      const survival = document.getElementById('slotSurvival');
+      if (data.slotSurvival?.total_events > 0) {
+        const s = data.slotSurvival;
+        survival.innerHTML = `
+          <div class="survival-stats">
+            <div class="survival-item">
+              <span class="survival-label">Average</span>
+              <span class="survival-value">${formatDuration(s.avg_seconds)}</span>
+            </div>
+            <div class="survival-item">
+              <span class="survival-label">Fastest</span>
+              <span class="survival-value">${formatDuration(s.min_seconds)}</span>
+            </div>
+            <div class="survival-item">
+              <span class="survival-label">Slowest</span>
+              <span class="survival-value">${formatDuration(s.max_seconds)}</span>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    async function loadCandidates() {
+      try {
+        const res = await fetch('/api/candidates');
+        const candidates = await res.json();
+        const body = document.getElementById('candidatesBody');
+        const count = document.getElementById('candidateCount');
+        count.textContent = candidates.length;
+
+        if (candidates.length === 0) {
+          body.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No candidates. Run: npm run add-candidate</td></tr>';
+          return;
+        }
+
+        body.innerHTML = candidates.map(c => {
+          const statusClass = c.status === 'booked' ? 'badge-success' : 'badge-warning';
+          return `<tr>
+            <td>${c.id}</td>
+            <td><strong>${c.fullName}</strong></td>
+            <td class="mono">${c.passport}</td>
+            <td>${c.city}</td>
+            <td>${c.priority}</td>
+            <td><span class="badge ${statusClass}">${c.status}</span></td>
+            <td>${c.jobStartDate || '—'}</td>
+          </tr>`;
+        }).join('');
+      } catch (e) {
+        console.error('Failed to load candidates:', e);
+      }
+    }
+
+    function formatDuration(seconds) {
+      if (!seconds) return 'N/A';
+      if (seconds < 60) return Math.round(seconds) + 's';
+      if (seconds < 3600) return Math.round(seconds / 60) + 'm';
+      return (seconds / 3600).toFixed(1) + 'h';
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ── Initialize ──
+    window.addEventListener('load', () => {
+      connect();
+      loadCandidates();
+      refreshIntelligence();
+
+      // Request notification permission
+      if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+      }
+
+      // Refresh data periodically
+      setInterval(loadCandidates, 30000);
+      setInterval(refreshIntelligence, 60000);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+centre: New Delhi
+visa_type: D
+# Replace with the exact category shown in your authenticated booking interface.
+application_category: Type D
+earliest_date: 2026-10-01
+latest_date: 2026-11-15
+preferred_weekdays: [0, 1, 2, 3, 4]
+earliest_time: '09:00'
+latest_time: '14:00'

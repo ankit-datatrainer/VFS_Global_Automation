@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Local synthetic booking test</title>
+<style>body{font:16px system-ui;max-width:800px;margin:32px auto}label{display:block;margin:8px}button{padding:8px;margin:8px}[hidden]{display:none!important}</style>
+<h1>LOCAL TEST ONLY — Bulgaria Type D</h1>
+<div id="authenticated">Signed in (synthetic)</div>
+<div id="route-country">Bulgaria</div><div id="route-centre">New Delhi</div>
+<div id="route-visa_type">D</div><div id="route-application_category">Type D</div>
+<section id="dashboard-page"><h2>Dashboard</h2><button id="dashboard_next" onclick="show('application')">New application</button></section>
+<section id="application-page" hidden><h2>Application</h2><button id="application_next" onclick="show('form')">Applicant details</button></section>
+<section id="form-page" hidden><h2>Applicant</h2><div id="fields"></div><button id="form_next" onclick="show('appointment')">Continue</button></section>
+<section id="appointment-page" hidden><h2>Appointments</h2><div id="slots"></div>
+<button id="refresh_availability" onclick="window.refreshCount++">Check availability</button>
+<button id="appointment_next" onclick="show('review')">Review appointment</button></section>
+<section id="review-page" hidden><h2>Review</h2><button id="review_submit" onclick="window.submitCount++;show('payment')">Confirm booking</button></section>
+<section id="payment-page" hidden><h2>Payment authentication</h2><button id="manual_payment" onclick="show('confirmation')">Human completes payment</button></section>
+<section id="confirmation-page" hidden><h2>Confirmed</h2><p id="reference">TEST-CONFIRMATION-001</p></section>
+<div id="summary"></div>
+<script>
+window.submitCount=0;window.refreshCount=0;
+function show(name){document.querySelectorAll('section').forEach(x=>x.hidden=x.id!==name+'-page')}
+function setup(data){
+ const a=data.applicant;
+ for(const name of ['first_name','last_name','date_of_birth','passport_number','passport_expiry_date','email','phone']){
+  const label=document.createElement('label');label.textContent=name;
+  const input=document.createElement('input');input.id=name;input.type=name.includes('date')?'date':'text';
+  label.append(input);document.querySelector('#fields').append(label);
+ }
+ const label=document.createElement('label');label.textContent='nationality';
+ const select=document.createElement('select');select.setAttribute('aria-label','nationality');select.innerHTML='<option value="">Choose</option><option value="IND">India</option>';label.append(select);document.querySelector('#fields').append(label);
+ const checkLabel=document.createElement('label');checkLabel.textContent='biometrics_required';const check=document.createElement('input');check.type='checkbox';checkLabel.append(check);document.querySelector('#fields').append(checkLabel);
+ for(const time of ['08:00','10:30','11:00']){
+  const button=document.createElement('button');button.className='slot';button.dataset.date=data.date;button.dataset.time=time;button.textContent=data.date+' '+time;
+  button.onclick=()=>{document.querySelector('#selected-slot')?.removeAttribute('id');button.id='selected-slot';document.querySelector('#review-time').textContent=time};document.querySelector('#slots').append(button);
+ }
+ const review={applicant:[a.first_name,a.middle_name,a.last_name].filter(Boolean).join(' '),passport:a.passport_number,country:'Bulgaria',visa_type:'D',centre:'New Delhi',date:data.date,time:'10:30',fee:'INR 1000 (synthetic)'};
+ for(const [key,value] of Object.entries(review)){const item=document.createElement('p');item.id='review-'+key;item.textContent=value;document.querySelector('#summary').append(item)}
+}
+</script></html>

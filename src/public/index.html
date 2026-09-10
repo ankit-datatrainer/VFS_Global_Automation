@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Slot Relay</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="brand">
+        <span class="dot" id="pulse"></span>
+        <h1>Slot Relay</h1>
+        <span class="tag">Bulgaria Type D · India</span>
+      </div>
+      <div class="bar-right">
+        <span id="clock" class="mono muted"></span>
+        <a class="portal" id="portalLink" href="#" target="_blank" rel="noopener">Official portal ↗</a>
+      </div>
+    </header>
+
+    <div class="banner">
+      This dashboard never contacts VFS. Every sighting below was reported by a
+      person who was already on the official portal.
+    </div>
+
+    <main>
+      <section class="card alarm-card" id="alarmCard" hidden>
+        <div>
+          <h2>Alarm is ringing</h2>
+          <p class="muted">Silence it once you are looking at the portal.</p>
+        </div>
+        <button class="btn danger" id="stopAlarm">Silence</button>
+      </section>
+
+      <section class="grid">
+        <div class="card span2">
+          <h2>Live now</h2>
+          <div id="live" class="live-list"><p class="muted">Loading…</p></div>
+        </div>
+
+        <div class="card">
+          <h2>Report what you see</h2>
+          <p class="muted small">
+            Only after you have looked at the portal yourself.
+          </p>
+          <label>Centre
+            <select id="repCentre"></select>
+          </label>
+          <label>Dates you can see
+            <input id="repDates" placeholder="15 Sep, 18 Sep" maxlength="200" />
+          </label>
+          <label>Note <span class="muted small">(optional)</span>
+            <input id="repNote" placeholder="Only morning slots left" maxlength="400" />
+          </label>
+          <div class="row">
+            <button class="btn primary" id="btnSeen">Slots are open</button>
+            <button class="btn" id="btnEmpty">Nothing there</button>
+          </div>
+          <p id="repMsg" class="msg"></p>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="card span2">
+          <h2>When slots have actually appeared</h2>
+          <p class="muted small">
+            IST. Darker means slots were more often present when someone looked.
+          </p>
+          <div id="heat" class="heat"></div>
+          <div id="hotList" class="hot-list"></div>
+        </div>
+
+        <div class="card">
+          <h2>Centres</h2>
+          <div id="breakdown" class="breakdown"></div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <h2>How fast they go</h2>
+          <div id="lifetime" class="stat-big"><span class="muted">No data yet</span></div>
+        </div>
+        <div class="card">
+          <h2>Your drill</h2>
+          <div id="drill" class="stat-big"><span class="muted">Never run</span></div>
+          <p class="muted small mono">npm run drill</p>
+        </div>
+        <div class="card">
+          <h2>Lookouts</h2>
+          <div id="subs" class="stat-big"><span class="muted">—</span></div>
+          <p class="muted small">Fairness caps are enforced on every fan-out.</p>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Recent reports</h2>
+        <div id="recent" class="recent"></div>
+      </section>
+    </main>
+
+    <footer>
+      <button class="btn ghost" id="testAlarm">Test the alarm</button>
+      <span class="muted small">
+        You always complete the booking yourself, on the official portal.
+      </span>
+    </footer>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

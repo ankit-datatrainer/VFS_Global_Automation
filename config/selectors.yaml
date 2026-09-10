@@ -1,0 +1,11 @@
+# No authenticated VFS DOM was supplied. Do not invent live selectors.
+# See docs/SELECTOR_MAPPING.md and the synthetic mapping in tests/conftest.py.
+verified: false
+observed_on: null
+notes: Authenticated Bulgaria Type D / New Delhi mapping is pending page inspection.
+states: {}
+fields: {}
+route_choices: []
+actions: {}
+route_summary: {}
+review: {}

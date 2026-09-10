@@ -1,0 +1,21 @@
+{
+  "name": "bulgaria-vfs-assistant",
+  "version": "1.0.0",
+  "description": "Python Playwright semi-automated Bulgaria Type D / New Delhi assistant with human security and booking checkpoints.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node tools/start-assistant.js",
+    "check": "node tools/start-assistant.js check",
+    "relay": "node start.js",
+    "drill": "node tools/drill.js",
+    "vault": "node tools/vault-cli.js",
+    "test": "node tools/test-assistant.js",
+    "test:relay": "node --test test/relay.test.js"
+  },
+  "dependencies": {},
+  "license": "MIT",
+  "private": true
+}
