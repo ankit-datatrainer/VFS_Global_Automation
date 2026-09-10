@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 /* ==========================================================================
    VFS Global Slot Relay — Facebook Blue & Pure White / Dark Mode Theme
    ========================================================================== */
@@ -122,7 +124,7 @@
 body {
   background-color: var(--bg-canvas);
   color: var(--text-primary);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
@@ -131,6 +133,10 @@ body {
   display: flex;
   flex-direction: column;
   transition: background-color 0.28s ease, color 0.28s ease;
+}
+
+button, input, select, textarea, optgroup, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 /* Monospace Utilities */
